@@ -8,27 +8,25 @@ import pandas as pd
 
 dataset = pd.read_csv("ResNet20_SHCUT_model_history_log.csv", delimiter=",")
 
-
-fig_0 = plt.figure()
-plt.plot(dataset['epoch'],dataset['loss'], label='train_loss')
-plt.plot(dataset['epoch'],dataset['val_loss'], label='val_loss')
-plt.legend()
-fig_0.savefig(fname='loss_and_val_loss_ResNet20_SHCUT.pdf', dpi=300, bbox_inches='tight', format='pdf')
-
-fig_00 = plt.figure()
-plt.plot(dataset['epoch'],dataset['Acc'], label='train_Acc')
-plt.plot(dataset['epoch'],dataset['val_Acc'], label='val_Acc')
-plt.legend()
-fig_0.savefig(fname='Acc_and_val_Acc_ResNet20_SHCUT.pdf', dpi=300, bbox_inches='tight', format='pdf')
-
-
-
+fig, ax = plt.subplots()
+ax1 = ax.twinx()
+ax.plot(dataset['epoch'],dataset['loss'], label='train_loss',color='blue',linestyle='solid')
+ax.plot(dataset['epoch'],dataset['val_loss'], label='val_loss',color='blue',linestyle='dashed')
+ax1.plot(dataset['epoch'],dataset['Acc'], label='train_Acc',color='red',linestyle='solid')
+ax1.plot(dataset['epoch'],dataset['val_Acc'], label='val_Acc',color='red',linestyle='dashed')
+ax.set_ylabel('Loss')
+ax1.set_ylabel('Acc')
+ax1.legend(loc=2)
+ax.legend(loc=1)
+plt.title('ResNet20_SHCUT_WD_BS128')
+fig.savefig(fname='D:\Loss_Visual\ResNet20_SHCUT_WD_B128\images\loss_Acc_ResNet20_SHCUT.pdf',
+            dpi=300, bbox_inches='tight', format='pdf')
 
 surf_name = "test_loss"
 
 with h5py.File(r'D:\Loss_Visual\ResNet20_SHCUT_WD_B128\3d_surface_file_ResNet20_SHCUT.h5','r') as f:
 
-    Z_LIMIT = 10
+    #Z_LIMIT = 10
 
     x = np.array(f['xcoordinates'][:])
     y = np.array(f['ycoordinates'][:])
@@ -45,27 +43,34 @@ with h5py.File(r'D:\Loss_Visual\ResNet20_SHCUT_WD_B128\3d_surface_file_ResNet20_
     ax.set_ylabel("y")
     ax.set_zlabel("f(x, y)")
     ax.plot_surface(X, Y, Z, linewidth=0, antialiased=False)
-    fig_1.savefig(fname='3D_surface_plot_ResNet20_SHCUT.pdf', dpi=300, bbox_inches='tight', format='pdf')
+    plt.title('ResNet20_SHCUT_WD_BS128')
+    fig_1.savefig(fname='D:\Loss_Visual\ResNet20_SHCUT_WD_B128\images\D3_surface_plot_ResNet20_SHCUT.pdf',
+                  dpi=300, bbox_inches='tight', format='pdf')
 
 
 
     fig_2 = plt.figure()
     CS = plt.contour(X, Y, Z, cmap='summer')
     plt.clabel(CS, inline=1, fontsize=8, colors='red')
-    fig_2.savefig(fname='2D_contor_plot_ResNet20_SHCUT.pdf', dpi=300, bbox_inches='tight', format='pdf')
+    plt.title('ResNet20_SHCUT_WD_BS128')
+    fig_2.savefig(fname='D:\Loss_Visual\ResNet20_SHCUT_WD_B128\images\D2_contor_plot_ResNet20_SHCUT.pdf',
+                  dpi=300, bbox_inches='tight', format='pdf')
 
 
     fig_3 = plt.figure()
     CS = plt.contourf(X, Y, Z, cmap='summer')
     plt.clabel(CS, inline=1, fontsize=8, colors='red')
-    fig_3.savefig(fname='2D_contorf_plot_ResNet20_SHCUT.pdf', dpi=300, bbox_inches='tight', format='pdf')
+    plt.title('ResNet20_SHCUT_WD_BS128')
+    fig_3.savefig(fname='D:\Loss_Visual\ResNet20_SHCUT_WD_B128\images\D2_contorf_plot_ResNet20_SHCUT.pdf',
+                  dpi=300, bbox_inches='tight', format='pdf')
 
 
     plt.figure()
-    sns_plot = sns.heatmap(Z, cmap='viridis', cbar=True, vmin=0.55, vmax=0.85,
+    sns_plot = sns.heatmap(Z, cmap='viridis', cbar=True, vmin=0.5, vmax=1.2,
                                xticklabels=False, yticklabels=False)
     sns_plot.invert_yaxis()
-    sns_plot.get_figure().savefig(fname='HeatMap_ResNet20_SHCUT.pdf', dpi=300, bbox_inches='tight', format='pdf')
+    sns_plot.get_figure().savefig(fname='D:\Loss_Visual\ResNet20_SHCUT_WD_B128\images\HeatMap_ResNet20_SHCUT.pdf',
+                                  dpi=300, bbox_inches='tight', format='pdf')
 
 
 plt.show()
